@@ -1,0 +1,150 @@
+#game-container {
+  max-height: 30vh; /* Adjust this value to suit your needs */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Added */
+}
+  
+  #container {
+    position: relative;
+    width: 30px;
+    height: 300px;
+    overflow: hidden;
+  }
+  
+  #heat {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background-color: white;
+    transition: height 0.5s;
+  }
+  
+  #rightContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: flex;
+    width: 30px;
+    height: 300px;
+    overflow: hidden;
+  }
+  
+  .ball {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    margin-bottom: 5px;
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  
+  .ball.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .ball.inactive {
+    transform: scale(0);
+  }
+  
+body {
+  overflow: hidden;
+}
+
+#pac-button-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  z-index: 2000;
+  width: 100%; /* Added */
+}
+
+#slider {
+    width: 60%;
+    appearance: none;
+    background: white;
+    height: 10px;
+    outline: none;
+    border-radius: 5px;
+}
+
+#slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+}
+
+#button1, #button2, #button3, #button4 {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#game-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  height: 100vh;
+}
+
+#game-container {
+  max-height: 50vh; /* Adjust this value to suit your needs */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#container {
+  position: relative;
+  width: 30px;
+  height: 300px;
+  overflow: hidden;
+}
+
+/* Rest of your CSS goes here */
+
+#pac-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  translate: 0px 45px;
+  padding: 10px;
+  z-index: 2000;
+  width: 100%;
+  margin-top: 10px;
+  gap: 15px;
+}
+
+@keyframes rainbow {
+  0%   {background-color: red;}
+  14%  {background-color: orange;}
+  28%  {background-color: yellow;}
+  42%  {background-color: green;}
+  57%  {background-color: blue;}
+  71%  {background-color: indigo;}
+  85%  {background-color: violet;}
+  100% {background-color: pink;}
+}
+#state2 { background-color: orange; display: none; }
+#state3 { background-color: yellow; display: none; }
+#state4 { background-color: green; display: none; }
+#state5 { background-color: blue; display: none; }
+#state6 { background-color: indigo; display: none; }
+#state7 { background-color: violet; display: none; }
+#state8 { background-color: pink; display: none; }
+
+.rainbow-peg {
+  animation: rainbow 3s linear infinite;
+}
