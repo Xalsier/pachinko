@@ -37,7 +37,6 @@ const startGameButton = document.getElementById('start-game-button');
 const returnToMenuButton = document.getElementById('button4');
 const buildGameButton = document.getElementById('build-game-button');
 let isBuildMode = false;
-
 function update() {
     let elapsedTime = (performance.now() - startTime) / 1000;
     ballStartingX = (canvas.width / 2) + Math.sin(elapsedTime * ballStartingXSpeed) * (canvas.width / 2 - ballRadius);
@@ -54,7 +53,6 @@ const loadPegsFromJSON = (fileName) => {
             vibration: 0
         })));
 };
-
 function loadPegsAndStartDrawing(fileName) {
     loadPegsFromJSON(fileName)
         .then(loadedPegs => {
@@ -63,9 +61,20 @@ function loadPegsAndStartDrawing(fileName) {
         })
         .catch(error => console.error(error));
 }
+// Update the color and visibility of the menu and build buttons based on rewardFlag
+function updateButtonStates() {
+    if (rewardFlag) {
+        document.getElementById('button4').style.backgroundColor = 'cyan';
+        document.getElementById('build-game-button').style.backgroundColor = 'cyan';
+        document.getElementById('build-game-button').style.visibility = 'visible';
+    } else {
+        document.getElementById('start-game-button').style.backgroundColor = '';
+        document.getElementById('build-game-button').style.visibility = 'hidden';
+    }
+}
 
 function updateTokens() {
-    convertButton.value = tokens; // update token count on Button 3
+    convertButton.value = tokens;
     convertButton.innerHTML = `${tokens}`;
     purchaseButton.innerHTML = `10`;
 }
@@ -73,26 +82,23 @@ startGameButton.addEventListener('click', () => {
     gameMenu.style.visibility = 'hidden';
     gameWrapper.style.visibility = 'visible';
     isBuildMode = false;
-    loadPegsAndStartDrawing('lotus.json'); // Load pegs and start drawing when the start game button is clicked
+    loadPegsAndStartDrawing('lotus.json');
 });
 buildGameButton.addEventListener('click', () => {
     gameMenu.style.visibility = 'hidden';
     gameWrapper.style.visibility = 'visible';
     isBuildMode = true;
-    loadPegsAndStartDrawing('empty.json'); // Load pegs and start drawing when the build game button is clicked
+    loadPegsAndStartDrawing('empty.json');
 });
 canvas.addEventListener('click', (event) => {
     if (isBuildMode) {
-        // Calculate the position of the click relative to the canvas
         const rect = canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-
-        // Add a new peg to the pegs array
         pegs.push({
             x,
             y,
-            type: 0, // Default peg type
+            type: 0,
             vibration: 0,
         });
     }
@@ -100,7 +106,6 @@ canvas.addEventListener('click', (event) => {
 returnToMenuButton.addEventListener('click', () => {
     gameMenu.style.visibility = 'visible';
     gameWrapper.style.visibility = 'hidden';
-    // Pause or stop the game here...
 });
 
 function drawPeg(ctx, {
@@ -157,7 +162,6 @@ throwButton.addEventListener('mouseup', () => {
         resetBall(1);
     }
 });
-
 function drawPegs(ctx, pegs, pegVibrationDecay) {
     if (pegs.length === 0) {
         return; // Return early if pegs is empty
@@ -170,13 +174,11 @@ function drawPegs(ctx, pegs, pegVibrationDecay) {
         }
     }
 }
-
 function drawHighScoreMeter() {
     const container = document.getElementById('container');
     const meterHeight = (score / 100) * container.offsetHeight;
     document.getElementById('heat').style.height = `${meterHeight}px`;
 }
-
 function drawAvailableBalls() {
     for (let i = 0; i < ballLimit; i++) {
         if (i < ballsLeft) {
@@ -188,7 +190,6 @@ function drawAvailableBalls() {
         }
     }
 }
-
 function drawBall(ball) {
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
@@ -208,7 +209,6 @@ function drawBall(ball) {
         ctx.stroke();
     }
 }
-
 function ballPegCollision(ball, pegX, pegY) {
     const dx = ball.x - pegX;
     const dy = ball.y - pegY;
@@ -226,14 +226,13 @@ function ballPegCollision(ball, pegX, pegY) {
         if (peg) {
             peg.vibration += pegVibrationAmplitude;
             if (peg.type === 0) {
-                score += 1;
+                score += 2;
             } else if (peg.type === 1) {
-                score += 5;
+                score += 3;
             }
         }
     }
 }
-
 function checkCollisions(ball) {
     for (let i = 0; i < pegs.length; i++) {
         ballPegCollision(ball, pegs[i].x, pegs[i].y);
@@ -255,7 +254,6 @@ function checkCollisions(ball) {
         ball.speedY = Math.abs(ball.speedY);
     }
 }
-
 function drawPredictivePath(angle, length) {
     ctx.clearRect(ballStartingX - ballRadius, 20 - ballRadius, ballRadius * 2, canvas.height - 20 + ballRadius); // clear previous path
     const endX = ballStartingX - Math.cos(angle) * length;
@@ -266,13 +264,11 @@ function drawPredictivePath(angle, length) {
     ctx.fill();
     ctx.closePath();
 }
-
 function applyImpulse(ball, nx, ny, restitution) {
     const impulse = -(1 + restitution) * (ball.speedX * nx + ball.speedY * ny) / (nx * nx + ny * ny);
     ball.speedX += impulse * nx;
     ball.speedY += impulse * ny;
 }
-
 function resetBall(power) {
     const angle = Math.PI / 2; // 90 degrees
     const speed = power; // Use the throw power as the speed
@@ -285,7 +281,6 @@ function resetBall(power) {
     };
     balls.push(newBall);
 }
-
 function updateBall(ball, elapsedTime) {
     ball.prevPositions.push({
         x: ball.x,
@@ -311,7 +306,7 @@ const draw = () => {
     }
     pegs.length > 0 && drawPegs(ctx, pegs);
     drawAvailableBalls();
-    score >= 100 && (score = 0);
+    score >= 100 && (score = 0, rewardFlag = true, updateButtonStates());
     requestAnimationFrame(draw);
 };
 loadPegsFromJSON() // Load base pegs
