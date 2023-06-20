@@ -64,6 +64,10 @@ body {
   width: 100%; /* Added */
 }
 
+#pachinkoCanvas {
+  border: 2px solid white;
+}
+
 #slider {
     width: 60%;
     appearance: none;
@@ -147,4 +151,25 @@ body {
 
 .rainbow-peg {
   animation: rainbow 3s linear infinite;
+}
+
+body {
+  background-color: black; /* Add this */
+}
+#game-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: column;
 }
